@@ -10,9 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Questions">
         <activity
-            android:name=".MainActivity"
+            android:name=".QuizzActivity"
+            android:exported="false"
+            android:label="@string/title_activity_quiz_question"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.Questions.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
