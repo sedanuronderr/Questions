@@ -1,12 +1,15 @@
 package com.seda.questions
 
 import android.annotation.SuppressLint
-import android.content.Context
+
 import android.graphics.Color
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.seda.questions.databinding.ActivityQuizzBinding
 
@@ -15,7 +18,7 @@ class QuizzActivity : AppCompatActivity(), View.OnClickListener{
     private var mCurrentPosition:Int=1
     private var mQuestionList :ArrayList<Question>?=null
     private var mSelectedOptionPosition:Int=0
-
+    private var mCorrectAnswer:Int=0
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,14 +31,21 @@ setQuestion()
         binding.optionTwo.setOnClickListener(this)
         binding.optionThree.setOnClickListener(this)
         binding.optionFour.setOnClickListener(this)
+        binding.submit.setOnClickListener(this)
     }
 
 
+    @SuppressLint("SetTextI18n")
     private  fun setQuestion(){
-        mCurrentPosition =1
         val question = mQuestionList?.get(mCurrentPosition-1)
+        defaultOptions()
 
-      defaultOptions()
+        if(mCurrentPosition == mQuestionList!!.size){
+            binding.submit.text="Finish"
+        }else{
+            binding.submit.text = "Submit"
+        }
+
         binding.progressbar.progress=mCurrentPosition
         binding.textProgressbar.text="$mCurrentPosition" + "/" + binding.progressbar.max
 
@@ -56,11 +66,114 @@ setQuestion()
 
         for(option in options){
             option.setTextColor(Color.GRAY)
+            option.typeface= Typeface.DEFAULT
             option.background=ContextCompat.getDrawable(this,R.drawable.option_border)
         }
     }
 
     override fun onClick(v: View?) {
+ when(v?.id){
+     R.id.option_one ->{
+         selectedOptionView(binding.optionOne,1)
+     Log.e("bastı","1")
+     }
+     R.id.option_two ->{
+         selectedOptionView(binding.optionTwo,2)
+         Log.e("bastı","2")
+     }
+     R.id.option_three ->{
+         selectedOptionView(binding.optionThree,3)
+         Log.e("bastı","3")
+     }
+     R.id.option_four ->{
+         selectedOptionView(binding.optionFour,4)
+         Log.e("bastı","4")
+     }
+     R.id.submit ->{
+  if(mSelectedOptionPosition ==0){
+       mCurrentPosition++
+
+      when{
+          mCurrentPosition <= mQuestionList!!.size   ->{
+              setQuestion()
+          } else ->{
+              Toast.makeText(this,"You have successfully completed the quiz",Toast.LENGTH_SHORT).show()
+          }
+      }
+
+  }else{
+
+      val question = mQuestionList?.get(mCurrentPosition-1)
+
+      if(question!!.correctAnswer != mSelectedOptionPosition) {
+
+             answerView(mSelectedOptionPosition,R.drawable.wrong)
+          answerView(question.correctAnswer,R.drawable.correct)
+          mSelectedOptionPosition =0
+
+      }else{
+          mCorrectAnswer++
+          answerView(question.correctAnswer,R.drawable.correct)
+
+          if(mCurrentPosition == mQuestionList!!.size){
+              binding.submit.text ="FINISH"
+          }
+          else{
+
+              binding.submit.text ="go to next question"
+          }
+          mSelectedOptionPosition =0
+      }
+
+
+  }
+
+     }
+ }
+    }
+    private fun answerView(answer:Int,drawableView:Int){
+   when(answer){
+       1->{
+           binding.optionOne.background=ContextCompat.getDrawable(this,drawableView)
+
+       }
+       2->{
+           binding.optionTwo.background=ContextCompat.getDrawable(this,drawableView)
+       }
+       3->{
+           binding.optionThree.background=ContextCompat.getDrawable(this,drawableView)
+       }
+       4->{
+           binding.optionFour.background=ContextCompat.getDrawable(this,drawableView)
+       }
+
+   }
 
     }
+    private fun selectedOptionView(tv:TextView,selectedOptionNum:Int){
+        defaultOptions()
+        mSelectedOptionPosition = selectedOptionNum
+        Log.e("num","${mSelectedOptionPosition}")
+        Log.e("text","${tv}")
+        if(mSelectedOptionPosition == 1) {
+            tv.setTextColor(Color.DKGRAY)
+            tv.setTypeface(tv.typeface, Typeface.BOLD)
+            tv.background = ContextCompat.getDrawable(this, R.drawable.select_option)
+        }
+       if(mSelectedOptionPosition == 2) {
+            tv.setTextColor(Color.DKGRAY)
+            tv.setTypeface(tv.typeface, Typeface.BOLD)
+            tv.background = ContextCompat.getDrawable(this, R.drawable.select_option)
+        }
+       if(mSelectedOptionPosition == 3) {
+            tv.setTextColor(Color.DKGRAY)
+            tv.setTypeface(tv.typeface, Typeface.BOLD)
+            tv.background = ContextCompat.getDrawable(this, R.drawable.select_option)
+        }
+       if(mSelectedOptionPosition == 4) {
+            tv.setTextColor(Color.DKGRAY)
+            tv.setTypeface(tv.typeface, Typeface.BOLD)
+            tv.background = ContextCompat.getDrawable(this, R.drawable.select_option)
+        }
+        }
 }
