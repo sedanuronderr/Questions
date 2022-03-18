@@ -21,6 +21,8 @@ binding.start.setOnClickListener {
 
     }else{
         val intent = Intent(this,QuizzActivity::class.java)
+
+        intent.putExtra(Constants.USER_NAME,binding.name.text.toString())
         startActivity(intent)
         finish()
     }

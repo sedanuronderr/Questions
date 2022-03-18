@@ -1,5 +1,8 @@
 package com.seda.questions
  object Constants {
+     const val USER_NAME:String="user"
+     const val Total_Question:String = "total"
+     const val Correct_Answers:String = "correct"
     fun getQuestions(): ArrayList<Question>{
         val questionList = ArrayList<Question>()
 

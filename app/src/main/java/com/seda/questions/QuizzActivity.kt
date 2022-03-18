@@ -1,6 +1,7 @@
 package com.seda.questions
 
 import android.annotation.SuppressLint
+import android.content.Intent
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -19,12 +20,16 @@ class QuizzActivity : AppCompatActivity(), View.OnClickListener{
     private var mQuestionList :ArrayList<Question>?=null
     private var mSelectedOptionPosition:Int=0
     private var mCorrectAnswer:Int=0
+    private  var mUserName:String?= null
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding =ActivityQuizzBinding.inflate(layoutInflater)
         setContentView(binding.root)
-mQuestionList = Constants.getQuestions()
+
+        mUserName = intent.getStringExtra(Constants.USER_NAME)
+   mQuestionList = Constants.getQuestions()
 setQuestion()
 
        binding.optionOne.setOnClickListener(this)
@@ -97,7 +102,12 @@ setQuestion()
           mCurrentPosition <= mQuestionList!!.size   ->{
               setQuestion()
           } else ->{
-              Toast.makeText(this,"You have successfully completed the quiz",Toast.LENGTH_SHORT).show()
+                    val intent =Intent(this,ResultActivity::class.java)
+          intent.putExtra(Constants.USER_NAME,mUserName)
+          intent.putExtra(Constants.Correct_Answers,mCorrectAnswer)
+          intent.putExtra(Constants.Total_Question,mQuestionList!!.size)
+                  startActivity(intent)
+finish()
           }
       }
 
@@ -109,6 +119,13 @@ setQuestion()
 
              answerView(mSelectedOptionPosition,R.drawable.wrong)
           answerView(question.correctAnswer,R.drawable.correct)
+          if(mCurrentPosition == mQuestionList!!.size){
+              binding.submit.text ="FINISH"
+          }
+          else{
+
+              binding.submit.text ="go to next question"
+          }
           mSelectedOptionPosition =0
 
       }else{

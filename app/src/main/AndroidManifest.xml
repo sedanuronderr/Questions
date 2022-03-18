@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Questions">
         <activity
+            android:name=".ResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".QuizzActivity"
             android:exported="false"
             android:label="@string/title_activity_quiz_question"
