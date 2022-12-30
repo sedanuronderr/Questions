@@ -1,5 +1,5 @@
 # Questions
-Proje de View Binding, Navigation,Retrofit kütüphaneleri kullanıldı.
+Projede View Binding, Navigation ve Retrofit kütüphaneleri kullanıldı.
 <table>
 <tr>
   <td>
